@@ -52,6 +52,7 @@ resource "aws_eip" "vpc_eip" {
 }
 
 resource "aws_nat_gateway" "natgw" {
+  count  = var.enable_nat_gw == true ? 1 : 0
   allocation_id = aws_eip.vpc_eip[0].id
   subnet_id     = aws_subnet.public_subnets[0].id
 
@@ -86,17 +87,18 @@ resource "aws_route_table_association" "public-association" {
 
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.app_vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.natgw.id
-  }
-
   tags = {
     Name = "${var.project_name}-${var.project_env}-private-route-table"
   }
 }
 
+resource "aws_route" "name" {
+  count  = var.enable_nat_gw == true ? 1 : 0
+  route_table_id = aws_route_table.private_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.natgw[0].id
+  
+}
 resource "aws_route_table_association" "private-association" {
   count          = 3
   subnet_id      = aws_subnet.private_subnets[count.index].id
