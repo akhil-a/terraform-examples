@@ -1,6 +1,6 @@
 
 
-resource "aws_vpc" "testvpc" {
+resource "aws_vpc" "app_vpc" {
   cidr_block           = var.vcp_cidr_block
   instance_tenancy     = "default"
   enable_dns_hostnames = true
@@ -12,7 +12,7 @@ resource "aws_vpc" "testvpc" {
 
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.testvpc.id
+  vpc_id = aws_vpc.app_vpc.id
 
   tags = {
     "Name" = "${var.project_name}-${var.project_env}-igw"
@@ -21,9 +21,9 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "public_subnets" {
-  vpc_id                  = aws_vpc.testvpc.id
+  vpc_id                  = aws_vpc.app_vpc.id
   count                   = 2
-  cidr_block              = cidrsubnet(aws_vpc.testvpc.cidr_block, 4, count.index)
+  cidr_block              = cidrsubnet(aws_vpc.app_vpc.cidr_block, 4, count.index)
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   tags = {
@@ -32,9 +32,9 @@ resource "aws_subnet" "public_subnets" {
 }
 
 resource "aws_subnet" "private_subnets" {
-  vpc_id                  = aws_vpc.testvpc.id
+  vpc_id                  = aws_vpc.app_vpc.id
   count                   = 3
-  cidr_block              = cidrsubnet(aws_vpc.testvpc.cidr_block, 4, "${count.index + 2}")
+  cidr_block              = cidrsubnet(aws_vpc.app_vpc.cidr_block, 4, "${count.index + 2}")
   map_public_ip_on_launch = false
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   tags = {
@@ -64,7 +64,7 @@ resource "aws_nat_gateway" "natgw" {
 }
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.testvpc.id
+  vpc_id = aws_vpc.app_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -85,7 +85,7 @@ resource "aws_route_table_association" "public-association" {
 
 
 resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.testvpc.id
+  vpc_id = aws_vpc.app_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
