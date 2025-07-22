@@ -87,7 +87,7 @@ resource "aws_security_group_rule" "alb-ingress-rule-http" {
 }
 
 resource "aws_security_group_rule" "alb-ingress-rules" {
-  count             = length(var.server_ports)
+
   for_each = toset(var.server_ports)
   type              = "ingress"
   from_port         = each.key
