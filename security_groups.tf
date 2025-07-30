@@ -50,10 +50,10 @@ resource "aws_security_group_rule" "websg-ingress-ssh" {
 
 
 resource "aws_security_group_rule" "websg-ingress-rules" {
-  for_each                 = toset(var.server_ports)
+  count                    = length(var.server_ports)
   type                     = "ingress"
-  from_port                = each.key
-  to_port                  = each.key
+  from_port                = var.server_ports[count.index]
+  to_port                  = var.server_ports[count.index]
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.alb_sg.id
   security_group_id        = aws_security_group.web_sg.id
@@ -77,11 +77,10 @@ resource "aws_security_group" "alb_sg" {
 }
 
 resource "aws_security_group_rule" "alb-ingress-rules" {
-
-  for_each          = toset(var.server_ports)
+  count             = length(var.server_ports)
   type              = "ingress"
-  from_port         = each.key
-  to_port           = each.key
+  from_port         = var.server_ports[count.index]
+  to_port           = var.server_ports[count.index]
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb_sg.id

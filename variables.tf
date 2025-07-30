@@ -23,6 +23,12 @@ variable "vcp_cidr_block" {
   description = "cidr block of VPC"
   type        = string
 }
+
+variable "domain_name" {
+  description = "domain name in route53"
+  type        = string
+}
+
 variable "enable_nat_gw" {
 
   description = "Set true to enable nat gw"
@@ -32,4 +38,9 @@ variable "enable_nat_gw" {
 variable "server_ports" {
   description = " port list"
   type        = list(any)
+}
+
+variable "asg_sizes" {
+  type = map(any)
+
 }
