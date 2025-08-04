@@ -2,4 +2,4 @@
 terraform-example for AWS infrastructure with EC2, VPC, Load Balancer, ACM etc
 
 
-<img src="img/arch.png" alt="Architecture" width="600">
+<img src="img/arch.png" alt="Architecture" width="1000">
