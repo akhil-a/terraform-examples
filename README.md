@@ -1,4 +1,4 @@
-# ☁️ AWS Scalable Web Application Architecture
+# ☁️ AWS Web Application With Terraform
 
 This project showcases a **highly available, secure, and scalable web application** architecture on AWS using Terraform.It is built using core AWS services such as EC2, VPC, ALB, Auto Scaling, Route 53, and more.
 
