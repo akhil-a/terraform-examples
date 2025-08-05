@@ -1,5 +1,5 @@
-project_name  = "terraform-php-website"
-project_env   = "production"
+project_name  = "terraform-website"
+project_env   = "prod"
 instance_type = "t2.micro"
 #ami_id         = "ami-0a1235697f4afa8a4"
 ami_id         = "ami-08ca1d1e465fbfe0c"
